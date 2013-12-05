@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Introducción Django</title>
+		<meta name="description" content="Introduccion a la programación con Django">
+        <meta name="author" content="Carlos César Huamani Sifuentes">
+        <link href='http://fonts.googleapis.com/css?family=Fenix' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css">
+		<link rel="stylesheet" href="css/zenburn.css">
+	</head>
+	<body>
+		<div class="reveal">
+            <div class="slides">
+            	<section data-background="#0A2E20">
+	            	<section>
+	                    <h1>Django</h1>
+	                    <h3>Entiendo como trabaja</h3>
+	                    <img src="img/django.png">
+	                    <p>
+	                    	<small>
+	                    		Creado por <a href="http://about.me/carloshs92">Carlos Huamaní </a> / <a href="http://twitter.com/carlosHS92">@carlosHS92</a>
+	                    	</small>
+	                    </p>
+	                </section>
+	                <section data-background="#65AC65" >
+	                	<h2>MTV y Django</h2>
+	                	<ul>
+	                		<li>El modelo en Django sigue siendo modelo</li>
+	                		<li>La vista en Django se llama Plantilla (Template)</li>
+	                		<li>El controlador en Django se llama Vista</li>
+	                	</ul>
+	                	<img src="img/esquema-mtv.png"/>
+	                </section>
+
+					<section>
+	                	<h2>Nombre de los archivos</h2>
+	                	<p>Estos son los principales nombres convencionales para trabajar con django:</p>
+	                	<ul style="float:left;">
+	                		<li>models.py.</li>
+	                		<li>views.py</li>
+	                		<li>admin.py</li>
+	                		<li>urls.py</li>
+	                		<li>settings.py</li>
+	                	</ul>
+	                </section>
+	                <section >
+	                	<h2>Cosas que debemos saber</h2>
+	                	<ul>
+	                		<li><b>PIP</b> <p>Herramienta para instalar paquetes de python</p>
+	                		<pre><code class="javascript" data-trim="" style="font-size: 18px; margin-top: 20px;" contenteditable="false">sudo yum install python-pip <!--python-dev build-essential--></code></pre></li>
+	                		<li><b>VirtualEnv</b><p>Entorno virtual de python</p>
+	                		<pre><code class="javascript" data-trim="" style="font-size: 18px; margin-top: 20px;" contenteditable="false">sudo yum install python-virtualenv</code></pre></li>
+	                	</ul>
+	                	<img src="img/apuntes.jpg">
+	                </section>
+	                <section>
+	                	<h2>Creando el ambiente virtual del proyecto</h2>
+	                	<pre><code class="javascript" data-trim="" style="font-size: 18px; margin-top: 20px;" contenteditable="false"><p>mkdir miproyecto</p><p>cd miproyecto</p><p>virtualenv venv --distribute</p><p>> Installing Setuptools...........................................done.<br>
+> Installing Pip.............................................done.</p><p>source venv/bin/activate</p><p>pip install django</p><p>pip freeze > requirements.txt</p></code></pre></li>
+	                	<img src="img/project-start.jpg">
+	                </section>
+	                <section>
+	                	<h2>Nuestra primera pagina en Django</h2>
+	                	<pre><code class="javascript" data-trim="" style="font-size: 18px; margin-top: 20px;" contenteditable="false"><p>django-admin.py startproject misitio .</p><p>python manage.py syncdb</p><p>python manage.py startapp libros</p><p>python manage.py runserver</p></code></pre>
+	                	<img src="img/build.jpg">
+	                </section>
+	                <section>
+	                	<h2>Agregando un modelo</h2>
+	                	<pre><code class="javascript" data-trim="" style="font-size: 18px; margin-top: 20px;" contenteditable="false">from django.db import models
+class Libros(models.Model):
+   	nombre = models.CharField(max_length=50)
+	descripcion = models.TextField()
+
+	def __unicode__(self):
+        return self.nombre
+</code></pre>
+	                	<img src="img/build.jpg">
+	                </section>
+                </section>
+            </div>
+        </div>
+		<script src="js/reveal.min.js"></script>
+		<script type="text/javascript">
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                    controls: true,
+                    progress: true,
+                    history: true,
+                    center: true,
+                    theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                    transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+            });   
+		</script>
+	</body>
+</html>
