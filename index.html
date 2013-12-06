@@ -63,20 +63,105 @@
 	                </section>
 	                <section>
 	                	<h2>Nuestra primera pagina en Django</h2>
-	                	<pre><code class="javascript" data-trim="" style="font-size: 18px; margin-top: 20px;" contenteditable="false"><p>django-admin.py startproject misitio .</p><p>python manage.py syncdb</p><p>python manage.py startapp libros</p><p>python manage.py runserver</p></code></pre>
+	                	<pre><code class="javascript" data-trim="" style="font-size: 18px; margin-top: 20px;" contenteditable="false"><p>django-admin.py startproject misitio .</p><p>python manage.py syncdb</p><p>python manage.py startapp libreria</p><p>python manage.py runserver</p></code></pre>
 	                	<img src="img/build.jpg">
 	                </section>
 	                <section>
-	                	<h2>Agregando un modelo</h2>
-	                	<pre><code class="javascript" data-trim="" style="font-size: 18px; margin-top: 20px;" contenteditable="false">from django.db import models
-class Libros(models.Model):
-   	nombre = models.CharField(max_length=50)
-	descripcion = models.TextField()
+	                	<h2>Agregando los modelos</h2>
+	                	<pre><code class="django" data-trim="" style="font-size: 18px; margin-top: 20px;" contenteditable="false"><span class="keyword"><b>#libreria/models.py</b></span>
 
-	def __unicode__(self):
-        return self.nombre
+<span class="keyword"><b>from</b></span> django.db <span class="keyword"><b>import</b></span> models
+
+<span class="keyword"><b>class</b></span> <span class="class"><b>Autor</b></span>(models.Model):
+   nombre = models.CharField(max_length=<span class="int"><b>50</b></span>)
+   descripcion = models.TextField(blank=<span class="int"><b>True</b></span>, null=<span class="int"><b>True</b></span>)
+
+     <span class="keyword"><b>def</b></span> __unicode__(<span class="keyword">self</span>):
+        <span class="keyword"><b>return</b></span> <span class="keyword">self</span>.nombre
+
+<span class="keyword"><b>class</b></span> <span class="class"><b>Categoria</b></span>(models.Model):
+   nombre = models.CharField(max_length=<span class="int"><b>50</b></span>)
+
+   <span class="keyword"><b>def</b></span> __unicode__(<span class="keyword">self</span>):
+        <span class="keyword"><b>return</b></span> <span class="keyword">self</span>.nombre
+
+<span class="keyword"><b>class</b></span> <span class="class"><b>Libros</b></span>(models.Model):
+   nombre = models.CharField(max_length=<span class="int"><b>100</b></span>)
+   paginas = models.IntegerField()
+   fec_publicacion = models.DateTimeField()
+   archivo = models.FileField(upload_to=<span class="int"><b>"libros/"</b></span>)
+   imagen = models.ImageField(upload_to=<span class="int"><b>"portadas/"</b></span>)
+   autor = models.ForeignKey(Autor)
+   categoria = models.ForeignKey(Categoria)
+
+   <span class="keyword"><b>def</b></span> __unicode__(<span class="keyword">self</span>):
+        <span class="keyword"><b>return</b></span> <span class="keyword">self</span>.nombre
+
 </code></pre>
 	                	<img src="img/build.jpg">
+	                </section>
+
+	                <section>
+	                	<h2>Mas tipos de campos...</h2>
+	                	<p>Aqui puedes encontrar mas <a href="https://docs.djangoproject.com/en/1.6/ref/models/fields/" target="_blank">referencias de los campos</a></p>
+	                	<img src="img/models.jpg" width="450" />
+	                </section>
+
+	                <section>
+	                	<h2>Aprendiendo el ORM</h2>
+	                	<pre><code class="javascript" data-trim="" style="font-size: 18px; margin-top: 20px;" contenteditable="false">python manage.py syncdb
+python manage.py shell
+from libreria.models import Autor, Categoria, Libros
+Autor.objects.all()
+autor = Autor.objects.create(nombre='Monty Python', descripcion='Autor de libros de humor')
+categoria = Categoria.objects.create(nombre='Humor')
+from datetime import datetime
+libro = Libros.objects.create(nombre='La broma', paginas=300, fec_publicacion=datetime.today(), autor=autor, categoria=categoria)
+mislibros = Libros.objects.all()
+
+for libro in mislibros:
+   print libro.nombre
+   print libro.paginas
+
+for cat in ['Accion', 'Horror', 'Suspenso']:
+   Categoria.objects.create(nombre=cat)
+</code></pre>
+						<p>Aqui puedes encontrar mas <a href="https://docs.djangoproject.com/en/1.6/ref/models/querysets/" target="_blank">querysets</a></p>
+	                </section>
+
+	                <section>
+	                	<h2>Filtros</h2>
+	                	<pre><code class="javascript" data-trim="" style="font-size: 18px; margin-top: 20px;" contenteditable="false"><span class="keyword"><b>#Excluir registros que comienzan con "H"</b></span>
+Categoria.objects.exclude(nombre__startswith="H")
+
+<span class="keyword"><b>#Registros que contienen la palabra "or"</b></span>
+Categoria.objects.filter(nombre__contains="or")
+
+<span class="keyword"><b>#¿Existe registros que contienen la palabra "ora"?</b></span>
+Categoria.objects.filter(nombre__contains="ora").exists()
+
+<span class="keyword"><b>#Cantidad de registros que contienen la palabra "or"</b></span>
+Categoria.objects.filter(nombre__contains="or").count()
+
+<span class="keyword"><b>#Orden de registros</b></span>
+Categoria.objects.all().order_by('nombre')
+Categoria.objects.all().order_by('nombre').reverse()
+Categoria.objects.all().order_by('-nombre')
+
+<span class="keyword"><b>#Seleccionar/Actualizar/Eliminar</b></span>
+Categoria.objects.get(pk=3)
+Categoria.objects.filter(pk=3).update(nombre="Terror")
+Categoria.objects.filter(pk=5).delete()
+</code></pre>
+<img src="img/filtro.jpg" width="200">
+	                </section>
+	                <section>
+	                	<h2>El admin de Django</h2>
+	                	<pre><code class="javascript" data-trim="" style="font-size: 18px; margin-top: 20px;" contenteditable="false"><span class="keyword"><b>#misitio/urls.py</b></span>
+
+admin.site.register(Autor)
+admin.site.register(Libros)
+admin.site.register(Categoria)</code></pre>
 	                </section>
                 </section>
             </div>
